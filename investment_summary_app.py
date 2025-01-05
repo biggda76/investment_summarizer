@@ -2,11 +2,11 @@ import os
 import openai
 import PyPDF2
 
-# Set your OpenAI API key
+# Klucz OpenAI - ChatGPT
 openai.api_key = "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"
 
 def extract_text_from_pdf(pdf_path):
-    """Extract text from a PDF file."""
+    """Ekstraktuj tekst z pliku pdf."""
     with open(pdf_path, 'rb') as file:
         reader = PyPDF2.PdfReader(file)
         text = ''
@@ -15,8 +15,8 @@ def extract_text_from_pdf(pdf_path):
     return text
 
 def summarize_text(text):
-    """Summarize text using OpenAI API."""
-    prompt = f"Summarize the investment strategy described in the following text:\n\n{text}\n\nSummary:"
+    """Podsumuj tekst zawarty w pliku za pomoca OpenAI API."""
+    prompt = f"Podsumuj strategie inwestycyjna opisana w nastepujacym tekscie:\n\n{text}\n\nSummary:"
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
@@ -26,43 +26,43 @@ def summarize_text(text):
     return response['choices'][0]['message']['content']
 
 def compare_summaries(summaries):
-    """Compare investment strategies using OpenAI API."""
-    comparison_prompt = "Compare the following investment strategies:\n\n"
+    """Porownaj strategie inwestycyjne przy uzyciu OpenAI API."""
+    comparison_prompt = "Porownaj nastepujace strategie inwestycyjne:\n\n"
     for i, summary in enumerate(summaries):
-        comparison_prompt += f"Strategy {i + 1}:\n{summary}\n\n"
-    comparison_prompt += "Provide a detailed comparison:"
+        comparison_prompt += f"Strategia {i + 1}:\n{summary}\n\n"
+    comparison_prompt += "Podaj dokladne porownanie miedzy strategiami inwestycyjnymi:"
     
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": comparison_prompt}],
-        temperature=0.7,
+        temperature=0.4,
         max_tokens=500
     )
     return response['choices'][0]['message']['content']
 
 def main(directory):
-    """Main function to process PDFs and summarize investment strategies."""
+    """Glowna funkcja do przetwarzania plikow PDF oraz podsumowania strategi inwestycyjnych."""
     pdf_files = [f for f in os.listdir(directory) if f.endswith('.pdf')]
     summaries = []
     
     for pdf_file in pdf_files:
         pdf_path = os.path.join(directory, pdf_file)
-        print(f"Processing file: {pdf_file}")
+        print(f"Przetwarzanie pliku: {pdf_file}")
         
-        # Extract text
+        # Ekstrakcja tekstu z PDF
         text = extract_text_from_pdf(pdf_path)
         
-        # Summarize
+        # Podsumowanie
         summary = summarize_text(text)
         summaries.append(summary)
-        print(f"Summary for {pdf_file}:\n{summary}\n")
+        print(f"Podsumowanie dla pliku {pdf_file}:\n{summary}\n")
     
-    # Compare summaries
+    # Porownanie podsumowania
     comparison = compare_summaries(summaries)
-    print("Comparison of Investment Strategies:\n")
+    print("Porownanie strategii inwestycyjnych:\n")
     print(comparison)
 
 if __name__ == "__main__":
-    # Set the directory containing PDF files
-    pdf_directory = r"C:\Users\laszy\Desktop\Semestr 9\Inżynieria oprogramowania\Ćwiczenia\test"  # Replace with your PDF directory path
+    # Ustawienie sciezki zawierajacej dokumenty PDF
+    pdf_directory = r"C:\Users\laszy\Desktop\Semestr 9\Inżynieria oprogramowania\Ćwiczenia\investment_summarizer\investment_summarizer"  # Sciezka zawierajaca dokumenty do porownania
     main(pdf_directory)
