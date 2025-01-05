@@ -1,6 +1,8 @@
 import os
 import openai
 import PyPDF2
+import tkinter as tk
+from tkinter import filedialog, messagebox
 
 # Klucz OpenAI - ChatGPT
 openai.api_key = "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"
@@ -19,7 +21,10 @@ def summarize_text(text):
     prompt = f"Podsumuj strategie inwestycyjna opisana w nastepujacym tekscie:\n\n{text}\n\nSummary:"
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": prompt}],
+        messages=[
+            {"role": "system", "content": "Jestes asystentem analizy finansowej."},
+            {"role": "user", "content": prompt}
+        ],
         temperature=0.4,
         max_tokens=300
     )
@@ -34,35 +39,70 @@ def compare_summaries(summaries):
     
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": comparison_prompt}],
+        messages=[
+            {"role": "system", "content": "Jestes asystentem analizy finansowej."},
+            {"role": "user", "content": comparison_prompt}
+        ],
         temperature=0.4,
         max_tokens=500
     )
     return response['choices'][0]['message']['content']
 
-def main(directory):
-    """Glowna funkcja do przetwarzania plikow PDF oraz podsumowania strategi inwestycyjnych."""
-    pdf_files = [f for f in os.listdir(directory) if f.endswith('.pdf')]
+def process_pdfs(folder_path, output_text):
+    """Przeanalizuj pliki PDF zawarte w wybranym folderze."""
+    pdf_files = [f for f in os.listdir(folder_path) if f.endswith('.pdf')]
     summaries = []
     
+    output_text.insert(tk.END, f"Przetwarzanie folderu: {folder_path}\n")
+    
     for pdf_file in pdf_files:
-        pdf_path = os.path.join(directory, pdf_file)
-        print(f"Przetwarzanie pliku: {pdf_file}")
+        pdf_path = os.path.join(folder_path, pdf_file)
+        output_text.insert(tk.END, f"Przetwarzanie pliku: {pdf_file}\n")
         
-        # Ekstrakcja tekstu z PDF
+        # Ekstrakcja tekstu
         text = extract_text_from_pdf(pdf_path)
         
         # Podsumowanie
-        summary = summarize_text(text)
-        summaries.append(summary)
-        print(f"Podsumowanie dla pliku {pdf_file}:\n{summary}\n")
+        try:
+            summary = summarize_text(text)
+            summaries.append(summary)
+            output_text.insert(tk.END, f"Podsumowanie dla {pdf_file}:\n{summary}\n\n")
+        except Exception as e:
+            output_text.insert(tk.END, f"Blad podczas przetwarzania {pdf_file}: {e}\n\n")
     
-    # Porownanie podsumowania
-    comparison = compare_summaries(summaries)
-    print("Porownanie strategii inwestycyjnych:\n")
-    print(comparison)
+    if summaries:
+        # Porownanie podsumowania
+        try:
+            comparison = compare_summaries(summaries)
+            output_text.insert(tk.END, "Porownanie strategi inwestycyjnych:\n")
+            output_text.insert(tk.END, f"{comparison}\n")
+        except Exception as e:
+            output_text.insert(tk.END, f"Blad podczas porownywania strategi inwestycyjnych: {e}\n")
+
+def select_folder(output_text):
+    """Otworz okno w celu wybrania folderu i analizy plikow PDF."""
+    folder_path = filedialog.askdirectory()
+    if folder_path:
+        output_text.delete(1.0, tk.END)  # Czyszczenie outputu
+        process_pdfs(folder_path, output_text)
+
+def main():
+    """Stworz aplikacje GUI."""
+    # Tworzenie glownego okna
+    root = tk.Tk()
+    root.title("Investment Summary App")
+    root.geometry("800x600")
+
+    # Tworzenie widetu tekstowego dla outputu
+    output_text = tk.Text(root, wrap=tk.WORD, height=30, width=90)
+    output_text.pack(padx=10, pady=10)
+
+    # Tworzenie przycisku do wyboru folderu
+    select_folder_button = tk.Button(root, text="Wybierz folder z dokumentami", command=lambda: select_folder(output_text))
+    select_folder_button.pack(pady=10)
+
+    # Loop
+    root.mainloop()
 
 if __name__ == "__main__":
-    # Ustawienie sciezki zawierajacej dokumenty PDF
-    pdf_directory = r"C:\Users\laszy\Desktop\Semestr 9\Inżynieria oprogramowania\Ćwiczenia\investment_summarizer\investment_summarizer"  # Sciezka zawierajaca dokumenty do porownania
-    main(pdf_directory)
+    main()
