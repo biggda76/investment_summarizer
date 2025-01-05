@@ -20,7 +20,7 @@ def summarize_text(text):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
-        temperature=0.7,
+        temperature=0.4,
         max_tokens=300
     )
     return response['choices'][0]['message']['content']
@@ -63,6 +63,12 @@ def main(directory):
     print(comparison)
 
 if __name__ == "__main__":
+    import sys
+    # Sprawdzenie GUI
+    if len(sys.argv) > 1 and sys.argv[1] == "--gui":
+        from investment_gui import run_gui
+        run_gui()
+    else:
     # Ustawienie sciezki zawierajacej dokumenty PDF
     pdf_directory = r"C:\Users\laszy\Desktop\Semestr 9\Inżynieria oprogramowania\Ćwiczenia\investment_summarizer\investment_summarizer"  # Sciezka zawierajaca dokumenty do porownania
     main(pdf_directory)
