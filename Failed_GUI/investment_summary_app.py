@@ -63,6 +63,12 @@ def main(directory):
     print(comparison)
 
 if __name__ == "__main__":
+    import sys
+    # Sprawdzenie GUI
+    if len(sys.argv) > 1 and sys.argv[1] == "--gui":
+        from investment_gui import run_gui
+        run_gui()
+    else:
     # Ustawienie sciezki zawierajacej dokumenty PDF
     pdf_directory = r"C:\Users\laszy\Desktop\Semestr 9\Inżynieria oprogramowania\Ćwiczenia\investment_summarizer\investment_summarizer"  # Sciezka zawierajaca dokumenty do porownania
     main(pdf_directory)
