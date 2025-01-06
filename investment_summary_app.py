@@ -79,6 +79,32 @@ def process_pdfs(folder_path, output_text):
         except Exception as e:
             output_text.insert(tk.END, f"Blad podczas porownywania strategi inwestycyjnych: {e}\n")
 
+def export_to_txt(output_text):
+    """Eksportuj tekst outputu do pliku TXT."""
+    # Zbieranie tekstu z calego widoku outputu
+    output = output_text.get(1.0, tk.END).strip()
+    if not output:
+        messagebox.showerror("Błąd", "Brak danych do eksportu.")  # Wyswietl blad jesli nie ma danych
+        return
+
+    # Otworz sciezke gdzie zapisac plik txt
+    file_path = filedialog.asksaveasfilename(
+        defaultextension=".txt",
+        filetypes=[("Text files", "*.txt")],
+        title="Zapisz jako plik TXT"
+    )
+    if not file_path:
+        return  # Anulowanie zapisywanie eksportu
+
+    try:
+        # Zapisz tekst w wybranym pliku
+        with open(file_path, "w", encoding="utf-8") as file:
+            file.write(output)
+        messagebox.showinfo("Sukces", f"Dane zostały zapisane jako plik TXT: {file_path}")
+    except Exception as e:
+        # Pokaz bledy jesli wystapia przy procesie zapisywania pliku
+        messagebox.showerror("Błąd", f"Wystąpił problem podczas eksportu: {str(e)}")
+
 def select_folder(output_text):
     """Otworz okno w celu wybrania folderu i analizy plikow PDF."""
     folder_path = filedialog.askdirectory()
@@ -100,6 +126,10 @@ def main():
     # Tworzenie przycisku do wyboru folderu
     select_folder_button = tk.Button(root, text="Wybierz folder z dokumentami", command=lambda: select_folder(output_text))
     select_folder_button.pack(pady=10)
+
+    # Tworzenie przycisku do eksportu tekstu do pliku TXT
+    export_button = tk.Button(root, text="Eksportuj", command=lambda: export_to_txt(output_text))
+    export_button.pack(pady=10)
 
     # Loop
     root.mainloop()
