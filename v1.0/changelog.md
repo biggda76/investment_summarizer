@@ -1,0 +1,2 @@
+#investment_summary_app_v1.0
+# Wersja v1.0 Programu "Investment Summary" zawiera proste GUI wraz z funkcjonalnością porównywania strategii inwestycyjnych. W trakcie tworzenia wersji v1.0 próbowano utworzyć inne GUI, zakończone niepowodzeniem. Brak możliwości logowania się do programu.
