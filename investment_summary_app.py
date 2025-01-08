@@ -25,8 +25,8 @@ def summarize_text(text):
             {"role": "system", "content": "Jestes asystentem analizy finansowej."},
             {"role": "user", "content": prompt}
         ],
-        temperature=0.4,
-        max_tokens=300
+        temperature=0.1,
+        max_tokens=2000
     )
     return response['choices'][0]['message']['content']
 
@@ -43,8 +43,8 @@ def compare_summaries(summaries):
             {"role": "system", "content": "Jestes asystentem analizy finansowej."},
             {"role": "user", "content": comparison_prompt}
         ],
-        temperature=0.4,
-        max_tokens=500
+        temperature=0.1,
+        max_tokens=2000
     )
     return response['choices'][0]['message']['content']
 
