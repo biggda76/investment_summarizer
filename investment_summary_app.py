@@ -124,7 +124,7 @@ def main():
     # Tworzenie glownego okna
     root = tk.Tk()
     root.title("Investment Summary App")
-    root.geometry("800x600")
+    root.geometry("800x650")
 
     # Tworzenie widgetu tekstowego dla outputu
     output_text = tk.Text(root, wrap=tk.WORD, height=30, width=90)
