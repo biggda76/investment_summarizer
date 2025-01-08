@@ -18,7 +18,7 @@ def extract_text_from_pdf(pdf_path):
 
 def summarize_text(text):
     """Podsumuj tekst zawarty w pliku za pomoca OpenAI API."""
-    prompt = f"Podsumuj strategie inwestycyjna opisana w nastepujacym tekscie:\n\n{text}\n\nSummary:"
+    prompt = f"Podsumuj po polsku strategie inwestycyjna opisana w nastepujacym tekscie:\n\n{text}\n\nSummary:"
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
@@ -32,10 +32,10 @@ def summarize_text(text):
 
 def compare_summaries(summaries):
     """Porownaj strategie inwestycyjne przy uzyciu OpenAI API."""
-    comparison_prompt = "Porownaj nastepujace strategie inwestycyjne:\n\n"
+    comparison_prompt = "Porownaj po polsku nastepujace strategie inwestycyjne:\n\n"
     for i, summary in enumerate(summaries):
         comparison_prompt += f"Strategia {i + 1}:\n{summary}\n\n"
-    comparison_prompt += "Podaj dokladne porownanie miedzy strategiami inwestycyjnymi:"
+    comparison_prompt += "Podaj po polsku dokladne porownanie miedzy strategiami inwestycyjnymi:"
     
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -48,10 +48,14 @@ def compare_summaries(summaries):
     )
     return response['choices'][0]['message']['content']
 
-def process_pdfs(folder_path, output_text):
+def process_pdfs(folder_path, output_text, processing_label):
     """Przeanalizuj pliki PDF zawarte w wybranym folderze."""
     pdf_files = [f for f in os.listdir(folder_path) if f.endswith('.pdf')]
     summaries = []
+
+    # Wyswietl informacje "Przetwarzanie..."
+    processing_label.config(text="Przetwarzanie w toku...")
+    processing_label.update_idletasks()
     
     output_text.insert(tk.END, f"Przetwarzanie folderu: {folder_path}\n")
     
@@ -79,6 +83,9 @@ def process_pdfs(folder_path, output_text):
         except Exception as e:
             output_text.insert(tk.END, f"Blad podczas porownywania strategi inwestycyjnych: {e}\n")
 
+   # Usun wiadomosc "Przetwarzanie..." po zakonczeniu
+    processing_label.config(text="")
+
 def export_to_txt(output_text):
     """Eksportuj tekst outputu do pliku TXT."""
     # Zbieranie tekstu z calego widoku outputu
@@ -105,12 +112,12 @@ def export_to_txt(output_text):
         # Pokaz bledy jesli wystapia przy procesie zapisywania pliku
         messagebox.showerror("Błąd", f"Wystąpił problem podczas eksportu: {str(e)}")
 
-def select_folder(output_text):
+def select_folder(output_text, processing_label):
     """Otworz okno w celu wybrania folderu i analizy plikow PDF."""
     folder_path = filedialog.askdirectory()
     if folder_path:
         output_text.delete(1.0, tk.END)  # Czyszczenie outputu
-        process_pdfs(folder_path, output_text)
+        process_pdfs(folder_path, output_text, processing_label)
 
 def main():
     """Stworz aplikacje GUI."""
@@ -119,12 +126,16 @@ def main():
     root.title("Investment Summary App")
     root.geometry("800x600")
 
-    # Tworzenie widetu tekstowego dla outputu
+    # Tworzenie widgetu tekstowego dla outputu
     output_text = tk.Text(root, wrap=tk.WORD, height=30, width=90)
     output_text.pack(padx=10, pady=10)
 
+    # Tworzenie napisu "Przetwarzanie..."
+    processing_label = tk.Label(root, text="", fg="red")
+    processing_label.pack(pady=5)
+
     # Tworzenie przycisku do wyboru folderu
-    select_folder_button = tk.Button(root, text="Wybierz folder z dokumentami", command=lambda: select_folder(output_text))
+    select_folder_button = tk.Button(root, text="Wybierz folder z dokumentami", command=lambda: select_folder(output_text, processing_label))
     select_folder_button.pack(pady=10)
 
     # Tworzenie przycisku do eksportu tekstu do pliku TXT
