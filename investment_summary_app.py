@@ -3,9 +3,48 @@ import openai
 import PyPDF2
 import tkinter as tk
 from tkinter import filedialog, messagebox
+from dotenv import load_dotenv, set_key
 
-# Klucz OpenAI - ChatGPT
-openai.api_key = "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"
+# Dopasowanie sciezki gdzie plik .env zostanie zapisany w sciezce z aplikacja
+script_dir = os.path.dirname(os.path.abspath(__file__))
+env_path = os.path.join(script_dir, ".env")
+
+# Wczytanie srodowiska z kluczem
+load_dotenv(env_path)
+
+
+def get_api_key(root):
+    """Popup aby zapytac uzytkownika o jego klucz OpenAI API."""
+    def save_key():
+        api_key = api_key_entry.get().strip()
+        if not api_key:
+            messagebox.showerror("Błąd", "Klucz API nie może być pusty!")
+            return
+        try:
+            # Zapis klucza do srodowiska
+            set_key(env_path, "OPENAI_API_KEY", api_key)
+            openai.api_key = api_key
+            popup.destroy()
+            initialize_app(root)  # Uruchomienie ponowne aplikacji po zapisaniu klucza
+        except Exception as e:
+            messagebox.showerror("Błąd", f"Nie udało się zapisać klucza API: {str(e)}")
+
+    # Utworzenie okienka na wprowadzenie klucza
+    popup = tk.Toplevel(root)
+    popup.title("Wprowadź klucz API")
+    popup.geometry("400x200")
+    tk.Label(popup, text="Wprowadź swój OpenAI API Key:", font=("Arial", 12)).pack(pady=10)
+
+    api_key_entry = tk.Entry(popup, width=40, show="*")
+    api_key_entry.pack(pady=5)
+
+    save_button = tk.Button(popup, text="Zapisz", command=save_key)
+    save_button.pack(pady=10)
+
+    popup.transient(root)  # Integracja popup z root
+    popup.grab_set()
+    popup.protocol("WM_DELETE_WINDOW", lambda: root.destroy())  # Zamkniecie protkolu jesli okno bedzie zamkniete
+
 
 def extract_text_from_pdf(pdf_path):
     """Ekstraktuj tekst z pliku pdf."""
@@ -15,6 +54,7 @@ def extract_text_from_pdf(pdf_path):
         for page in reader.pages:
             text += page.extract_text()
     return text
+
 
 def summarize_text(text):
     """Podsumuj tekst zawarty w pliku za pomoca OpenAI API."""
@@ -30,13 +70,14 @@ def summarize_text(text):
     )
     return response['choices'][0]['message']['content']
 
+
 def compare_summaries(summaries):
     """Porownaj strategie inwestycyjne przy uzyciu OpenAI API."""
     comparison_prompt = "Porownaj po polsku nastepujace strategie inwestycyjne:\n\n"
     for i, summary in enumerate(summaries):
         comparison_prompt += f"Strategia {i + 1}:\n{summary}\n\n"
     comparison_prompt += "Podaj po polsku dokladne porownanie miedzy strategiami inwestycyjnymi:"
-    
+
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
@@ -48,24 +89,25 @@ def compare_summaries(summaries):
     )
     return response['choices'][0]['message']['content']
 
+
 def process_pdfs(folder_path, output_text, processing_label):
     """Przeanalizuj pliki PDF zawarte w wybranym folderze."""
     pdf_files = [f for f in os.listdir(folder_path) if f.endswith('.pdf')]
     summaries = []
 
-    # Wyswietl informacje "Przetwarzanie..."
+    # Wyswietlanie informacji "Przetwarzanie..."
     processing_label.config(text="Przetwarzanie w toku...")
     processing_label.update_idletasks()
-    
+
     output_text.insert(tk.END, f"Przetwarzanie folderu: {folder_path}\n")
-    
+
     for pdf_file in pdf_files:
         pdf_path = os.path.join(folder_path, pdf_file)
         output_text.insert(tk.END, f"Przetwarzanie pliku: {pdf_file}\n")
-        
+
         # Ekstrakcja tekstu
         text = extract_text_from_pdf(pdf_path)
-        
+
         # Podsumowanie
         try:
             summary = summarize_text(text)
@@ -73,15 +115,17 @@ def process_pdfs(folder_path, output_text, processing_label):
             output_text.insert(tk.END, f"Podsumowanie dla {pdf_file}:\n{summary}\n\n")
         except Exception as e:
             output_text.insert(tk.END, f"Blad podczas przetwarzania {pdf_file}: {e}\n\n")
-    
+
     if summaries:
         # Porownanie podsumowania
         try:
             comparison = compare_summaries(summaries)
-            output_text.insert(tk.END, "Porownanie strategi inwestycyjnych:\n")
+            output_text.insert(tk.END, "Porownanie strategii inwestycyjnych:\n")
             output_text.insert(tk.END, f"{comparison}\n")
         except Exception as e:
-            output_text.insert(tk.END, f"Blad podczas porownywania strategi inwestycyjnych: {e}\n")
+            output_text.insert(tk.END, f"Blad podczas porownywania strategii inwestycyjnych: {e}\n")
+
+    processing_label.config(text="Przetwarzanie zakończone.")
 
    # Usun wiadomosc "Przetwarzanie..." po zakonczeniu
     processing_label.config(text="")
@@ -101,10 +145,9 @@ def export_to_txt(output_text):
         title="Zapisz jako plik TXT"
     )
     if not file_path:
-        return  # Anulowanie zapisywanie eksportu
+        return
 
     try:
-        # Zapisz tekst w wybranym pliku
         with open(file_path, "w", encoding="utf-8") as file:
             file.write(output)
         messagebox.showinfo("Sukces", f"Dane zostały zapisane jako plik TXT: {file_path}")
@@ -112,21 +155,17 @@ def export_to_txt(output_text):
         # Pokaz bledy jesli wystapia przy procesie zapisywania pliku
         messagebox.showerror("Błąd", f"Wystąpił problem podczas eksportu: {str(e)}")
 
+
 def select_folder(output_text, processing_label):
     """Otworz okno w celu wybrania folderu i analizy plikow PDF."""
     folder_path = filedialog.askdirectory()
     if folder_path:
-        output_text.delete(1.0, tk.END)  # Czyszczenie outputu
+        output_text.delete(1.0, tk.END)
         process_pdfs(folder_path, output_text, processing_label)
 
-def main():
-    """Stworz aplikacje GUI."""
-    # Tworzenie glownego okna
-    root = tk.Tk()
-    root.title("Investment Summary App")
-    root.geometry("800x650")
 
-    # Tworzenie widgetu tekstowego dla outputu
+def initialize_app(root):
+    """Uruchom glowna aplikacje."""
     output_text = tk.Text(root, wrap=tk.WORD, height=30, width=90)
     output_text.pack(padx=10, pady=10)
 
@@ -142,8 +181,23 @@ def main():
     export_button = tk.Button(root, text="Eksportuj", command=lambda: export_to_txt(output_text))
     export_button.pack(pady=10)
 
-    # Loop
+
+def main():
+    """Stworz aplikacje GUI."""
+    global root
+    root = tk.Tk()
+    root.title("Investment Summary App")
+    root.geometry("800x650")
+
+    # Sprawdzenie klucza
+    if not os.getenv("OPENAI_API_KEY"):
+        get_api_key(root)
+    else:
+        openai.api_key = os.getenv("OPENAI_API_KEY")
+        initialize_app(root)
+
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()
