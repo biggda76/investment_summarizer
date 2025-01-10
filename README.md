@@ -309,7 +309,7 @@ investment-summary-app/
 
 ## Testing
 
-Tests for all functionalities were performed and can be found in the [Testy] directory
+Tests for all functionalities were performed and can be found in the [Testy](Testy) directory
 
 ---
 
@@ -333,6 +333,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Authors
 
 This app was created by Bogdan Łaszyn
+
 ---
 
 ## Support
