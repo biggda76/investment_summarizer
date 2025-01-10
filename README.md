@@ -99,10 +99,14 @@ pip install openai PyPDF2 python-dotenv
 
 ```plaintext
 investment-summary-app/
-├── investment_summary_app.py   # Główny skrypt aplikacji
-├── .env                        # Automatycznie generowany plik środowiska dla klucza API
-├── requirements.txt            # Lista zależności Pythona
-└── README.md                   # Dokumentacja
+├── investment_summary_app.exe          # Główna aplikacja
+├── investment_summary_app.py           # Główny skrypt aplikacji
+├── .env                                # Automatycznie generowany plik środowiskowy zawierający klucz API
+├── requirements.txt                    # Lista zależności Pythona
+├── README.md                           # Dokumentacja
+├── Testy                               # Testy
+├── Specyfikacja_wymagan.md             # Specyfikacja wymagań
+└── Charakterystyka_oprogramowania.md   # Charakterystyka oprogramowania
 ```
 
 ---
@@ -285,10 +289,14 @@ pip install openai PyPDF2 python-dotenv
 
 ```plaintext
 investment-summary-app/
-├── investment_summary_app.py   # Main application script
-├── .env                        # Automatically generated environment file for the API key
-├── requirements.txt            # List of Python dependencies
-└── README.md                   # Documentation
+├── investment_summary_app.exe          # Main application file
+├── investment_summary_app.py           # Main application script
+├── .env                                # Automatically generated environment file for the API key
+├── requirements.txt                    # List of Python dependencies
+├── README.md                           # Documentation
+├── Testy                               # Testing scenarios & cases
+├── Specyfikacja_wymagan.md             # Requirements specification
+└── Charakterystyka_oprogramowania.md   # Software characteristics
 ```
 
 ---
