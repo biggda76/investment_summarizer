@@ -150,6 +150,12 @@ Ten projekt jest licencjonowany na podstawie licencji MIT. Szczegóły znajdzies
 
 ---
 
+## Autorzy
+Aplikacja został
+
+
+---
+
 ## Wsparcie
 
 W przypadku pytań lub problemów prosimy o kontakt na [b.laszyn.151@studms.ug.edu.pl] bądź [laszyn.2000@gmail.com] lub otwarcie zgłoszenia w serwisie GitHub.
