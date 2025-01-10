@@ -133,6 +133,18 @@ investment-summary-app/
 
 ---
 
+## Testowanie
+
+Wykonane testy dla każdej funkcjonalności aplikacji są dostępne pod ścieżką [Testy](Testy).
+
+---
+
+## Charakterystyka oprogramowania i specyfikacja wymagań
+
+Charakterystyka oprogramowania może być znaleziona w pliku [Charakterystyka oprogramowania](Charakterystyka_oprogramowania.md), a specyfikacja wymagań w pliku [Specyfikacja wymagan](Specyfikacja_wymagan.md).
+
+---
+
 ## Współpraca
 
 Współpraca jest mile widziana! Aby wnieść wkład:
@@ -147,6 +159,12 @@ Współpraca jest mile widziana! Aby wnieść wkład:
 ## Licencja
 
 Ten projekt jest licencjonowany na podstawie licencji MIT. Szczegóły znajdziesz w pliku [LICENSE](LICENSE).
+
+---
+
+## Autorzy
+
+Aplikacja została wykonana przez Bogdan Łaszyn.
 
 ---
 
@@ -301,6 +319,18 @@ investment-summary-app/
 
 ---
 
+## Testing
+
+Tests for all functionalities were performed and can be found in the [Testy](Testy) directory.
+
+---
+
+## Software Characteristics and Requirements Specification
+
+The software characteristics can be found in the file [Charakterystyka oprogramowania](Charakterystyka_oprogramowania.md), and the requirements specification in the file [Specyfikacja wymagan](Specyfikacja_wymagan.md).
+
+---
+
 ## Contributing
 
 Contributions are welcome! To contribute:
@@ -315,6 +345,12 @@ Contributions are welcome! To contribute:
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## Authors
+
+This app was created by Bogdan Łaszyn.
 
 ---
 
