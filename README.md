@@ -4,7 +4,7 @@ For english please see below.
 
 ## Przegląd
 
-**Aplikacja Podsumowania Inwestycji** to przyjazna dla użytkownika aplikacja desktopowa, zaprojektowana do analizy i porównywania strategii inwestycyjnych opisanych w plikach PDF. Wykorzystując API GPT firmy OpenAI, aplikacja wydobywa tekst z PDF-ów, podsumowuje treści i dostarcza szczegółowe porównania między wieloma strategiami inwestycyjnymi.
+**Investment Summary App** to przyjazna dla użytkownika aplikacja desktopowa, zaprojektowana do analizy i porównywania strategii inwestycyjnych opisanych w plikach PDF. Wykorzystując API GPT firmy OpenAI, aplikacja wydobywa tekst z PDF-ów, podsumowuje treści i dostarcza szczegółowe porównania między wieloma strategiami inwestycyjnymi.
 
 To narzędzie jest idealne dla każdego, kto chce uprościć proces analizy inwestycji i szybko zdobyć wgląd w dokumenty.
 
@@ -104,6 +104,15 @@ investment-summary-app/
 ├── requirements.txt            # Lista zależności Pythona
 └── README.md                   # Dokumentacja
 ```
+
+---
+
+## Wykorzystana technologia
+
+| Technologia  | Cel                        | Wersja        |
+|--------------|----------------------------|---------------|
+| Python       | Backend, rozwój aplikacji  | 3.13.1        |
+| OpenAI API   | Analiza danych dokumentów  | gpt-3.5-turbo |
 
 ---
 
@@ -263,6 +272,15 @@ investment-summary-app/
 ├── requirements.txt            # List of Python dependencies
 └── README.md                   # Documentation
 ```
+
+---
+
+## Techonology used
+
+| Technology   | Purpose                    | Version       |
+|--------------|----------------------------|---------------|
+| Python       | Backend, app development   | 3.13.1        |
+| OpenAI API   | Document analysis          | gpt-3.5-turbo |
 
 ---
 
