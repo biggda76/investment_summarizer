@@ -151,8 +151,8 @@ Ten projekt jest licencjonowany na podstawie licencji MIT. Szczegóły znajdzies
 ---
 
 ## Autorzy
-Aplikacja został
 
+Aplikacja został wykonany przez Bogdan Łaszyn
 
 ---
 
@@ -307,6 +307,12 @@ investment-summary-app/
 
 ---
 
+## Testing
+
+Tests for all functionalities were performed and can be found in the [Testy] directory
+
+---
+
 ## Contributing
 
 Contributions are welcome! To contribute:
@@ -322,6 +328,11 @@ Contributions are welcome! To contribute:
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
+---
+
+## Authors
+
+This app was created by Bogdan Łaszyn
 ---
 
 ## Support
